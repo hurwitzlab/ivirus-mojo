@@ -1,0 +1,45 @@
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#projects-tbl').dataTable({"iDisplayLength": 50});
+});
+
+function confirmDelete(url) {
+  var ok = confirm('Are you sure you want to delete this project?');
+  if (ok) {
+    $.post(url, function() { location.href = "/admin/list_projects"; });
+  }
+}
+</script>
+
+<h1>Projects</h1>
+
+[% IF projects.size > 0 %]
+<table id="projects-tbl" class="display" cellspacing="0" width="100%">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>PI</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    [% FOREACH p IN projects %]
+    <tr>
+      <td>
+        <a href="/admin/edit_project/[% p.project_id %]">[% p.project_name %]</a>
+      </td>
+      <td>[% p.pi %]</td>
+      <td>
+        <a class="btn btn-default" href="/project/view/[% p.project_id %]">View</a>
+      </td>
+      <td>
+        <a class="btn btn-default" onclick="confirmDelete('/admin/delete_project/[% p.project_id %]')">Delete</a>
+      </td>
+    </tr>
+    [% END %]
+  </tbody>
+</table>
+[% ELSE %]
+  No projects.
+[% END %]

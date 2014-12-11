@@ -1,0 +1,337 @@
+<script type="text/javascript">
+$(document).ready(function() {
+  var dt_opts = {
+    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    "iDisplayLength": 10
+  };
+
+  $('#combined-assemblies-tbl').dataTable(dt_opts);
+  $('#assemblies-tbl').dataTable(dt_opts);
+  $('#samples-tbl').dataTable(dt_opts);
+});
+
+var map;
+function initialize() {
+  var center = new google.maps.LatLng(0, 0);
+  map = new google.maps.Map(document.getElementById("map-canvas"), 
+    { zoom: 2, center: center });
+
+  $.getJSON(
+    '/sample/list.json?project_id=[% project.project_id %]',
+    function(data) { 
+      $.each(data, function(i, sample) {
+        if (sample.latitude && sample.longitude) {
+          var pos = new google.maps.LatLng(sample.latitude, sample.longitude);
+
+          var marker = new google.maps.Marker({
+            position: pos,
+            map: map,
+            title: sample.sample_name
+          });
+
+          var infowindow = new google.maps.InfoWindow({
+            content: 
+              '<a href="/sample/view/' + sample.sample_id + '"\>' +
+              sample.sample_name + '</a><br/><ul>' + 
+              '<li>Phylum: ' + sample['phylum'] +
+              '<li>Class: ' + sample['class'] +
+              '<li>Family: ' + sample['family'] +
+              '<li>Genus: ' + sample['genus'] +
+              '<li>Species: ' + sample['species'] +
+              '<li>Strain: ' + sample['strain'] + '</ul>'
+          });
+
+          google.maps.event.addListener(marker, 'click', function() {
+            infowindow.open(map,marker);
+          });
+        }
+      });
+    }
+  );
+}
+
+$(document).ready(function() {
+  google.maps.event.addDomListener(window, "load", initialize);
+
+  $('a[href="#map"]').on('shown.bs.tab', function(e) {
+    lastCenter=map.getCenter();
+    google.maps.event.trigger(map, 'resize');
+    map.setCenter(lastCenter);
+  });
+});
+</script>
+</script>
+
+[% SET iplant="http://mirrors.iplantcollaborative.org/browse/iplant/home/shared/imicrobe/camera/camera_projects/" %]
+
+[% 
+  SET download_files = [];
+  FOREACH ft IN ['read', 'meta', 'assembly', 'peptide', 'read_pep', 'nt' ]; 
+    SET file = ft _ '_file';
+    IF project.$file;
+      download_files.push({ ft = ft, file = project.$file });
+    END;
+  END;
+%]
+
+<div class="row">
+  <h2 id="nav-tabs">Project: [% project.project_name OR 'Unknown project' %]</h2>
+  <div class="bs-component">
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#info" data-toggle="tab">Info</a></li>
+      <li><a href="#desc" data-toggle="tab">Description</a></li>
+      <li><a href="#downloads" data-toggle="tab">Downloads ([% download_files.size OR '0' %])</a></li>
+      <li><a href="#samples" data-toggle="tab">Samples ([% project.samples.size OR '0' %])</a></li>
+      <li><a href="#assemblies" data-toggle="tab">Assemblies ([% project.assemblies.size OR '0' %])</a></li>
+      [% IF project.combined_assemblies.size > 0 %]
+      <li><a href="#combined-assemblies" data-toggle="tab">Combined Assemblies ([% project.combined_assemblies.size %])</a></li>
+      [% END %]
+      [% IF project.project_pages.size > 0 %]
+      <li><a href="#project-pages" data-toggle="tab">Docs</a></li>
+      [% END %]
+      <li><a href="#map" data-toggle="tab">Samples Map</a></li>
+    </ul>
+
+    <div id="tabContent" class="tab-content">
+      <div class="tab-pane fade active in" id="info">
+        <br/>
+        <table class="table">
+          <tr>
+            <th>Domain[% IF domains.size > 1; 's'; END %] ([% domains.size OR '0' %])</th>
+            <td>
+              [% 
+                IF domains.size > 0; 
+                  SET d=[]; 
+                  FOREACH domain IN domains;
+                    d.push("<a href=\"/project/list?domain=${domain}\">$domain</a>");
+                  END;
+                  d.join(', ');
+                ELSE;
+                  'Unknown';
+                END;
+              %]
+            </td>
+          </tr>
+          <tr>
+            <th>PI</th>
+            <td>[% project.pi %]</td>
+          </tr>
+          <tr>
+            <th>Institution</th>
+            <td>[% project.institution OR 'N/A' %]</td>
+          </tr>
+          <tr>
+            <th>Project Code</th>
+            <td>[% project.project_code %]</td>
+          </tr>
+          <tr>
+            <th>Project Type</th>
+            <td>[% project.project_type %]</td>
+          </tr>
+        </table>
+        </p>
+      </div>
+
+      <div class="tab-pane fade" id="desc">
+        <br/>
+        <div class="col-lg-6">
+        <p>[% project.description.replace('\n\n', '<p>') OR 'N/A' %]</p>
+        </div>
+      </div>
+
+      <div class="tab-pane fade" id="assemblies">
+        <br/>
+        [% IF project.assemblies.size > 0 %]
+          <table id="assemblies-tbl" class="display" cellspacing="0" width="100%">
+           <thead>
+           <tr>
+             <th>Name</th>
+             <th>Code</th>
+             <th>Organism</th>
+             <th>CDS</th>
+             <th>NT</th>
+             <th>Pep</th>
+           </tr>
+           </thead>
+
+           <tbody>
+           [% FOREACH assembly IN project.assemblies %]
+             <tr>
+               <td><a href="/assembly/view/[% assembly.assembly_id %]">[% assembly.assembly_name %]</a></td>
+               <td>[% assembly.assembly_code %]</td>
+               <td>[% assembly.organism %]</td>
+               <td>[% IF assembly.cds_file %]<a href="[% assembly.cds_file %]"><img src="/img/file_gz.png"></a>[% ELSE %]&nbsp;[% END %]</td>
+               <td>[% IF assembly.nt_file %]<a href="[% assembly.nt_file %]"><img src="/img/file_gz.png"></a>[% ELSE %]&nbsp;[% END %]</td>
+               <td>[% IF assembly.pep_file %]<a href="[% assembly.pep_file %]"><img src="/img/file_gz.png"></a>[% ELSE %]&nbsp;[% END %]</td>
+             </tr>
+           [% END %]
+           </tbody>
+
+          </table>
+          <div class="text-center">
+          <a class="btn btn-primary download-btn" href="/assembly/list.tab?project_id=[% project.project_id %]&download=assembly-list-project-[% project.project_id %]">Download</a>
+          </div>
+        [% ELSE %]
+          No assemblies.
+        [% END %]
+        <p>
+      </div>
+
+      [% IF project.combined_assemblies.size > 0 %]
+        <div class="tab-pane fade" id="combined-assemblies">
+        <br/>
+            <table id="combined-assemblies-tbl" class="display" cellspacing="0" width="100%">
+             <thead>
+             <tr>
+               <th>Name</th>
+               <th>Phylum</th>
+               <th>Class</th>
+               <th>Family</th>
+               <th>Genus</th>
+               <th>Species</th>
+               <th>Strain</th>
+               <th>PCR Amp</th>
+               <th>Samples</th>
+               <th>Downloads</th>
+             </tr>
+             </thead>
+
+             <tbody>
+             [% SET ca_url = "http://mirrors.iplantcollaborative.org/browse/iplant/home/shared/imicrobe/camera/camera_mmetsp_ncgr/combined_assemblies/" %]
+             [% FOREACH assembly IN project.combined_assemblies %]
+               <tr>
+                 <td>
+                   <a href="/combined_assembly/view/[% assembly.combined_assembly_id %]">[% assembly.assembly_name %]</a>
+                 </td>
+                 <td>[% assembly.phylum %]</td>
+                 <td>[% assembly.class %]</td>
+                 <td>[% assembly.family %]</td>
+                 <td>[% assembly.genus %]</td>
+                 <td>[% assembly.species %]</td>
+                 <td>[% assembly.strain %]</td>
+                 <td>[% assembly.pcr_amp %]</td>
+                 <td>
+                   [% IF assembly.samples.size > 0 %]
+                     <ul>
+                     [% FOREACH sample IN assembly.samples %]
+                       <li><a href="/sample/view/[% sample.sample_id %]">[% sample.sample_name %]</a></li>  
+                     [% END %]
+                     </ul>
+                   [% ELSE %]
+                    &nbsp;
+                   [% END %]
+                 </td>
+                 <td>
+                   [% IF assembly.annotations_file %]
+                     <a href="[% ca_url %][% assembly.annotations_file %]"><img src="/img/file_gz.png">&nbsp;Annot</a><br/>
+                   [% END %]
+                   [% IF assembly.peptides_file %]
+                     <a href="[% ca_url %][% assembly.peptides_file %]"><img src="/img/file_gz.png">&nbsp;Pep</a><br/>
+                   [% END %]
+                   [% IF assembly.nucleotides_file %]
+                     <a href="[% ca_url %][% assembly.nucleotides_file %]"><img src="/img/file_gz.png">&nbsp;NT</a><br/>
+                   [% END %]
+                   [% IF assembly.cds_file %]
+                     <a href="[% ca_url %][% assembly.cds_file %]"><img src="/img/file_gz.png">&nbsp;CDS</a>
+                   [% END %]
+                 </td>
+               </tr>
+             [% END %]
+             </tbody>
+
+            </table>
+          <p>
+        </div>
+      [% END %]
+
+      <div class="tab-pane fade" id="samples">
+        <br/>
+        [% IF project.samples.size > 0 %]
+          <table id="samples-tbl" class="display" cellspacing="0" width="100%">
+           <thead>
+           <tr>
+            <th>Name</th>
+            <th>PI</th>
+            <th>Reads</th>
+            <th>Annots</th>
+            <th>Pep</th>
+            <th>Contigs</th>
+            <th>CDS</th>
+            <th>Phylum</th>
+            <th>Class</th>
+            <th>Family </th>
+            <th>Genus</th>
+            <th>Species</th>
+            <th>Strain</th>
+            <th>Clonal</th>
+            <th>Axenic</th>
+            <th>PCR Amp</th>
+           </tr>
+           </thead>
+
+           <tbody>
+           [% FOREACH sample IN project.samples %]
+             <tr>
+               <td><a href="/sample/view/[% sample.sample_id %]">[% sample.sample_name %]</a></td>
+
+               <td>[% sample.pi %]</td>
+               [% FOREACH field IN ['reads_file', 'annotations_file', 'peptides_file', 'contigs_file', 'cds_file'] %]
+                 <td>
+                  [% IF sample.$field %]
+                    <a href="[% sample.$field %]"><img src="/img/file_gz.png"></a>
+                  [% ELSE %]   
+                    &nbsp;
+                  [% END %]   
+                 </td>
+               [% END %]
+               [% FOREACH field IN ['phylum', 'class', 'family', 'genus', 'species', 'strain', 'clonal', 'axenic', 'pcr_amp' ] %]
+               <td>[% sample.$field %]</td>
+               [% END %]
+             </tr>
+           [% END %]
+           </tbody>
+          </table>
+          <div class="text-center">
+          <a class="btn btn-primary download-btn" href="/sample/list.tab?project_id=[% project.project_id %]&download=samples-list-project-[% project.project_id %]">Download</a>
+          </div>
+        [% ELSE %]
+          No samples.
+        [% END %]
+        <p>
+      </div>
+
+      <div class="tab-pane fade" id="downloads">
+        <br/>
+        [% SET url = "http://mirrors.iplantcollaborative.org/browse/iplant/home/shared/imicrobe/camera/camera_projects" %]
+        [% IF download_files.size > 0 %]
+          <ul>
+            [% FOREACH f IN download_files %]
+            <li><a href="[% url %]/[% f.file %]"><img src="/img/file_gz.png">&nbsp;[% f.ft.ucfirst %]</a>
+            [% END %]
+          </ul>
+        [% ELSE %]
+          None.
+        [% END %]
+        </p>
+      </div>
+
+      [% IF project.project_pages.size > 0 %]
+        <div class="tab-pane fade" id="project-pages">
+          <br/>
+            <ul>
+            [% FOREACH page IN project.project_pages %]
+              <li><a href="/project_page/view/[% page.id %]">[% page.title %]</a></li>
+            [% END %]
+            </ul>
+        </div>
+      [% END %]
+
+      <div class="tab-pane fade" id="map">
+        <br/>
+        <div id="map-canvas"></div>
+      </div>
+    </div>
+  <div id="source-button" class="btn btn-primary btn-xs" style="display: none;">&lt; &gt;</div></div>
+</div>
+
+</div>

@@ -1,0 +1,42 @@
+[% USE Comma %]
+<script>
+$(document).ready(function() {
+  $('#refs').dataTable({"iDisplayLength": 25});
+});
+</script>
+
+<div class="row">
+  <h1>[% title %]</h1>
+  [% USE Comma %]
+  [% IF refs.size > 0 %]
+  <table id="refs" class="display" cellspacing="0" width="100%">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Revision</th>
+        <th>Build Date</th>
+        <th>Seq Count</th>
+        <th>Length</th>
+        <th>Data</th>
+      </tr>
+    </thead>
+    <tbody>
+    [% FOREACH ref IN refs %]
+      <tr>
+        <td>[% ref.name OR 'Untitled' %]</td>
+        <td>[% ref.revision %]</td>
+        <td>[% ref.build_date %]</td>
+        <td align="right">[% ref.seq_count | comma %]</td>
+        <td align="right">[% ref.length | comma %]</td>
+        <td><a href="[% ref.url %]">[% ref.file %]</a></td>
+      </tr>
+    [% END %]
+    </tbody>
+  </table>
+  <div class="text-center">
+    <a class="btn btn-primary download-btn" href="/download">Download</a>
+  </div>
+  [% ELSE %]
+    No references.
+  [% END %]
+</div>

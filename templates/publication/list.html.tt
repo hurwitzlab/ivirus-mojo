@@ -1,0 +1,48 @@
+<script>
+$(document).ready(function() {
+  $('#pubs').dataTable({
+    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    "iDisplayLength": 10
+  });
+});
+</script>
+
+<div class="row">
+  <h1>[% title %]</h1>
+  [% USE Comma %]
+  [% IF pubs.size > 0 %]
+  <table id="pubs" class="display" cellspacing="0" width="100%">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Journal</th>
+        <th>Date</th>
+        <th>PubMed</th>
+      </tr>
+    </thead>
+    <tbody>
+    [% FOREACH pub IN pubs %]
+      <tr>
+        <td><a href="/publication/view/[% pub.publication_id %]">[% pub.title OR 'Untitled' %]</a></td>
+        <td>[% pub.author OR 'Unknown' %]</td>
+        <td>[% pub.journal OR 'Unknown' %]</td>
+        <td>[% pub.pub_date OR 'NA' %]</td>
+        <td>
+          [% IF pub.pubmed_id %]
+            <a href="http://www.ncbi.nlm.nih.gov/pubmed/?term=[% pub.pubmed_id %]">[% pub.pubmed_id %]</a>
+          [% ELSE %]
+            &nbsp;
+          [% END %]
+        </td>
+      </tr>
+    [% END %]
+    </tbody>
+  </table>
+  <div class="text-center">
+    <a class="btn btn-primary download-btn" href="/download">Download</a>
+  </div>
+  [% ELSE %]
+    No pubs.
+  [% END %]
+</div>

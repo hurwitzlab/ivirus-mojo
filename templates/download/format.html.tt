@@ -1,0 +1,24 @@
+[% SET url=c.req.headers.referrer OR '' %]
+<h1>[% title %]</h1>
+
+<div class="text-center">
+<form role="form" method="post" action="/download/get">
+  <div class="well well-sm text-center">
+    <input type="hidden" name="url" value="[% url %]">
+    From:
+    [% IF url %]
+      <a href="[% url %]">[% IF url.length > 80 %][% url.chunk(80).join("<br/>") %][% ELSE %][% url %][% END %]</a>
+    [% ELSE %]
+      'No refering URL' 
+    [% END %]
+  </div>
+  <div class="form-group">
+    <label for="format">Format</label>
+    <select name="format" id="format">
+      <option value="tab">Tab-delimited</option>
+      <option value="json">JSON</option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</div>

@@ -1,0 +1,55 @@
+<script>
+function confirmDelete(url) {
+  var ok = confirm('Are you sure you want to delete this project?');
+  if (ok) {
+    $.post(url, function() { location.href = "/admin/list_projects"; });
+  }
+}
+</script>
+
+<div class="text-center">
+  <a class="btn btn-default" href="/admin/create_project_page_form/[% project.project_id %]">Create Project Page</a>
+
+  <a class="btn btn-default" onclick="confirmDelete('/admin/delete_project/[% project.project_id %]')">Delete</a>
+
+  <a class="btn btn-default" href="/admin/list_samples/[% project.project_id %]">Samples</a>
+
+  [% IF num_pages > 0 %]
+  <a class="btn btn-default" href="/admin/view_project_pages/[% project.project_id %]">View Project Pages ([% num_pages %])</a>
+  [% END %]
+</div>
+
+<div class="row">
+  <h3>Edit Project</h3>
+  <form role="form" method="post" action="/admin/update_project">
+    <div class="form-group">
+      <label for="project_name">Project Name</label>
+      <input type="text" class="form-control" id="project_name" name="project_name" value="[% project.project_name %]">
+    </div>
+    <div class="form-group">
+      <label for="pi">PI</label>
+      <input type="text" class="form-control" id="pi" name="pi" value="[% project.pi %]">
+    </div>
+    <div class="form-group">
+      <label for="institution">Institution</label>
+      <input type="text" class="form-control" id="institution" name="institution" value="[% project.institution %]">
+    </div>
+    <div class="form-group">
+      <label for="project_code">Project Code</label>
+      <input type="text" class="form-control" id="project_code" name="project_code" value="[% project.project_code %]">
+    </div>
+    <div class="form-group">
+      <label for="project_type">Project Type</label>
+      <input type="text" class="form-control" id="project_type" name="project_type" value="[% project.project_type %]">
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" name="description" class="form-control" rows="10">[% project.description %]</textarea>
+    </div>
+    <div class="text-center form-group">
+      <input type="hidden" name="project_id" value="[% project_id %]">
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <br/>
+    </div>
+  </form>
+</div>

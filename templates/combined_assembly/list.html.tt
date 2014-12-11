@@ -1,0 +1,83 @@
+[% DEFAULT title="Combined Assemblies" %]
+
+<script>
+$(document).ready(function() {
+  $('#assemblies-tbl').dataTable({
+    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    "iDisplayLength": 10
+  });
+});
+</script>
+
+<div class="row">
+  <h1>[% title %]</h1>
+  [% USE Comma %]
+  [% IF assemblies.size > 0 %]
+    <table id="assemblies-tbl" class="display" cellspacing="0" width="100%">
+     <thead>
+     <tr>
+       <th>Project</th>
+       <th>Name</th>
+       <th>Phylum</th>
+       <th>Class</th>
+       <th>Family</th>
+       <th>Genus</th>
+       <th>Species</th>
+       <th>Strain</th>
+       <th>PCR Amp</th>
+       <th>Samples</th>
+       <th>Downloads</th>
+     </tr>
+     </thead>
+
+     <tbody>
+     [% SET ca_url = "http://mirrors.iplantcollaborative.org/browse/iplant/home/shared/imicrobe/camera/camera_mmetsp_ncgr/combined_assemblies/" %]
+     [% FOREACH assembly IN assemblies %]
+       <tr>
+         <td>
+           <a href="/project/view/[% assembly.project_id %]">[% assembly.project_name | truncate(20) %]</a>
+         </td>
+         <td><a href="/combined_assembly/view/[% assembly.combined_assembly_id %]">[% assembly.assembly_name %]</a></td>
+         <td>[% assembly.phylum %]</td>
+         <td>[% assembly.class %]</td>
+         <td>[% assembly.family %]</td>
+         <td>[% assembly.genus %]</td>
+         <td>[% assembly.species %]</td>
+         <td>[% assembly.strain %]</td>
+         <td>[% assembly.pcr_amp %]</td>
+         <td>
+           [% IF assembly.samples.size > 0 %]
+             <ul>
+             [% FOREACH sample IN assembly.samples %]
+               <li><a href="/sample/view/[% sample.sample_id %]">[% sample.sample_name %]</a></li>  
+             [% END %]
+             </ul>
+           [% ELSE %]
+            &nbsp;
+           [% END %]
+         </td>
+         <td>
+           [% IF assembly.annotations_file %]
+             <a href="[% ca_url %][% assembly.annotations_file %]"><img src="/img/file_gz.png">&nbsp;Annot</a><br/>
+           [% END %]
+           [% IF assembly.peptides_file %]
+             <a href="[% ca_url %][% assembly.peptides_file %]"><img src="/img/file_gz.png">&nbsp;Pep</a><br/>
+           [% END %]
+           [% IF assembly.nucleotides_file %]
+             <a href="[% ca_url %][% assembly.nucleotides_file %]"><img src="/img/file_gz.png">&nbsp;NT</a><br/>
+           [% END %]
+           [% IF assembly.cds_file %]
+             <a href="[% ca_url %][% assembly.cds_file %]"><img src="/img/file_gz.png">&nbsp;CDS</a>
+           [% END %]
+         </td>
+       </tr>
+     [% END %]
+     </tbody>
+    </table>
+    <div class="text-center">
+      <a class="btn btn-primary download-btn" href="/download">Download</a>
+    </div>
+  [% ELSE %]
+    No assemblies.
+  [% END %]
+</div>

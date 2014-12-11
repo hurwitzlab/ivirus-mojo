@@ -1,0 +1,67 @@
+[% USE Comma %]
+
+<script>
+$(document).ready(function() {
+  $('#projects').dataTable({
+    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    "iDisplayLength": 10
+  });
+});
+</script>
+
+<div class="row">
+  <h1>[% title %]</h1>
+  [% IF domain %]
+    <div class="well well-sm text-center">
+    <a href="[% c.req.url.path %]"><span class="glyphicon glyphicon-remove-circle"></span>&nbsp;[% domain %] only</a>
+    </div>
+  [% END %]
+  [% IF projects.size > 0 %]
+  <table id="projects" class="display" cellspacing="0" width="100%">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>PI</th>
+        <th>Domain of Life</th>
+        <th>&#35;&nbsp;Samples</th>
+        <th>Reads</th>
+        <th>Metadata</th>
+        <th>Assemblies</th>
+        <th>Peptides</th>
+      </tr>
+    </thead>
+    <tbody>
+    [% SET iplant="http://mirrors.iplantcollaborative.org/browse/iplant/home/shared/imicrobe/camera/camera_projects/" %]
+    [% FOREACH project IN projects %]
+      <tr>
+        <td><a href="/project/view/[% project.project_id %]">[% project.project_name | truncate(70) %]</a></td>
+        <td>[% project.pi | truncate(30) %]</td>
+        <td>
+          [% 
+            IF project.domains.size > 0; 
+              SET d=[]; 
+              FOREACH domain IN project.domains;
+                d.push("<a href=\"/project/list?domain=${domain}\">$domain</a>");
+              END;
+              d.join(', ');
+            ELSE;
+              'Unknown';
+            END;
+          %]
+        </td>
+        <td align="right">[% project.num_samples OR '0' | comma %]</td>
+        <td align="center">[% IF project.read_file %]<a target="_blank" href="[% iplant %][% project.read_file %]"><img src="/img/file_gz.png"></a>[% ELSE %]&nbsp;[% END %]</td>
+        <td align="center">[% IF project.meta_file %]<a target="_blank" href="[% iplant %][% project.meta_file %]"><img src="/img/file_meta.png"></a>[% ELSE %]&nbsp;[% END %]</td>
+        <td align="center">[% IF project.assembly_file %]<a target="_blank" href="[% iplant %][% project.assembly_file %]"><img src="/img/file_asm.png"></a>[% ELSE %]&nbsp;[% END %]</td>
+        <td align="center">[% IF project.peptide_file %]<a target="_blank" href="[% iplant %][% project.peptide_file %]"><img src="/img/file_pep.png"></a>[% ELSE %]&nbsp;[% END %]</td>
+      </tr>
+    [% END %]
+    </tbody>
+  </table>
+  <div class="text-center">
+    <a class="btn btn-primary download-btn" href="/download">Download</a>
+  </div>
+  [% ELSE %]
+    No projects.
+  [% END %]
+</div>

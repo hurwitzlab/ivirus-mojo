@@ -1,0 +1,30 @@
+<div class="row">
+  <h1>[% title %]</h1>
+  <table class="table">
+    <tr>
+      <th>Project</th>
+      <td><a href="/project/view/[% assembly.project_id %]">[% assembly.project_name %]</a></td>
+    </tr>
+    <tr>
+      <th>Code</th>
+      <td>[% assembly.assembly_code %]</td>
+    </tr>
+    <tr>
+      <th>Organism</th>
+      <td>[% assembly.organism %]</td>
+    </tr>
+    <tr>
+      <th>CDS</th>
+      <td>[% IF assembly.cds_file %]<a href="[% assembly.cds_file %]"><img src="/img/file_gz.png"></a>[% ELSE %]N/A[% END %]</td>
+    </tr>
+    <tr>
+      <th>NT</th>
+      <td>[% IF assembly.nt_file %]<a href="[% assembly.nt_file %]"><img src="/img/file_gz.png"></a>[% ELSE %]N/A[% END %]</td>
+    </tr>
+    <tr>
+      <th>Peptides</th>
+      <td>[% IF assembly.pep_file %]<a href="[% assembly.pep_file %]"><img src="/img/file_gz.png"></a>[% ELSE %]N/A[% END %]</td>
+    </tr>
+  </table>
+  </p>
+</div>

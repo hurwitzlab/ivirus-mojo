@@ -1,0 +1,8 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+<ShortName>iVirus</ShortName>
+<Description>Search iVirus</Description>
+<Url type="text/html" method="get" template="http://data.ivirus.us/search?query={searchTerms}"/>
+<Image height="16" width="16" type="image/vnd.microsoft.icon">http://data.ivirus.us/img/favicon.ico</Image>
+<moz:SearchForm>http://data.ivirus.us/search</moz:SearchForm>
+<Url type="application/opensearchdescription+xml" rel="self" template="http://data.ivirus.us/opensearch.xml"/>
+</OpenSearchDescription>

@@ -1,0 +1,38 @@
+<div class="row">
+  <h1>Edit Publication: [% pub.title | truncate(60) %]</h1>
+  <form role="form" method="post" action="/admin/update_publication">
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input type="text" class="form-control" id="title" name="title" value="[% pub.title %]">
+  </div>
+  <div class="form-group">
+    <label for="author">Author</label>
+    <input type="text" class="form-control" id="author" name="author" value="[% pub.author %]">
+  </div>
+  <div class="form-group">
+    <label for="journal">Journal</label>
+    <input type="text" class="form-control" id="journal" name="journal" value="[% pub.journal %]">
+  </div>
+  <div class="form-group">
+    <label for="pub_code">Pub Code</label>
+    <input type="text" class="form-control" id="pub_code" name="pub_code" value="[% pub.pub_code %]">
+  </div>
+  <div class="form-group">
+    <label for="pub_date">Pub Date</label>
+    <input type="text" class="form-control" id="pub_date" name="pub_date" value="[% pub.pub_date %]">
+  </div>
+  <div class="form-group">
+    <label for="doi">DOI</label>
+    <input type="text" class="form-control" id="doi" name="doi" value="[% pub.doi %]">
+  </div>
+  <div class="form-group">
+    <label for="pubmed_id">PubMed ID</label>
+    <input type="text" class="form-control" id="pubmed_id" name="pubmed_id" value="[% pub.pubmed_id %]">
+  </div>
+  <div class="form-group">
+    <label for="project_id">Project ID</label>
+    <input type="text" class="form-control" id="project_id" name="project_id" value="[% pub.project_id %]">
+  </div>
+  <input type="hidden" name="publication_id" value="[% pub.publication_id %]">
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

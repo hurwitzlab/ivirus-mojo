@@ -1,0 +1,61 @@
+[% 
+  USE Comma;
+  SET name_fields = {
+  'assembly'          => 'assembly_name',
+  'project'           => 'project_name',
+  'publication'       => 'title',
+  'sample'            => 'sample_name'
+  'combined_assembly' => 'assembly_name',
+} %]
+<div class="row">
+<h1>Search</h1>
+
+<div class="well well-sm text-center">
+  [% IF query %]
+  Found [% results.size | comma %] record[% IF results.size == 1; ''; ELSE; 's'; END %] 
+  for &quot;[% query %].&quot;<br/>
+  [% ELSE %]
+    Search for something like &quot;<a href="/search?query=virus">virus</a>&quot; or &quot;<a href="/search?query=virus">human</a>&quot; or &quot;<a href="/search?query=virus">ocean</a>.&quot;
+  [% END %]
+
+  <form class="form-inline" role="form">
+    <div class="form-group">
+    <input type="text" class="form-control" name="query" value="[% query %]">
+    [% IF c.req.param('type') %]
+      <input type="hidden" name="type" value="[% c.req.param('type') %]">
+    [% END %]
+    [% IF types.size > 1 %]
+      <select name="type" class="form-control">
+        <option value="">--Restrict by type--</option>
+        [% FOREACH type IN types.keys.sort %]
+        <option value="[% type %]">[% type %] ([% types.$type %])</option>
+        [% END %]
+      </select>
+    [% END %]
+    <button type="submit" class="btn btn-default">Search</button>
+  </div>
+  </form>
+
+  [% IF c.req.param('type') %]
+    <br/>
+    <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<a href="[% c.req.url.path %]?query=[% query %]">[% c.req.param('type') %]</a>
+  [% END %]
+</div>
+
+[% IF results.size > 0 %]
+  <br>
+  <div class="col-lg-2"></div>
+  <div class="col-lg-8">
+    <ul>
+    [% FOREACH result IN results %]
+      [% SET table = result.table_name; SET name_field = name_fields.$table; SET name = result.object.$name_field %]
+      <li><a href="[% result.url %]">[% table | ucfirst %]: [% name %]</a></li>
+      </p>
+     [% END %]
+    </ul>
+    <div class="text-center">
+      <a class="btn btn-primary download-btn" href="/search.tab?[% c.req.url.query({'download' = 'search'}).query %]">Download</a>
+    </div>
+  </div>
+[% END %]
+</div>

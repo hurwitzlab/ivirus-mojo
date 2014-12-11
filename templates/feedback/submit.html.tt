@@ -1,0 +1,45 @@
+<div class="jumbotron">
+  [% IF errors.size > 0 %]
+    <div class="well text-center">
+      <b>Error:</b>
+      <div class="text-left">
+      <ul>
+      [% FOREACH err IN errors %]
+        <li>[% err %]</li>
+      [% END %]
+      </div>
+      </ul>
+    </div>
+  [% ELSE %]
+    <h1>[% title %]</h1>
+    <table class="table">
+      <tr>
+        <th>To:</th>
+        <td>
+          [% To | html %]
+        </td>
+      </tr>
+      <tr>
+        <th>From:</th>
+        <td>
+          [% From | html %]
+        </td>
+      </tr>
+      <tr>
+        <th>Subject:</th>
+        <td>
+          [% Subject %]
+        </td>
+      </tr>
+      <tr>
+        <th>Message:</th>
+        <td>
+          [% Message | html_para %]
+        </td>
+      </tr>
+    </table>
+    <div class="text-center">
+    <a class="btn btn-primary" href="[% return_url %]">Back to the page I was viewing</a>
+    </div>
+  [% END %]
+</div>

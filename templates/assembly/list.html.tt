@@ -1,0 +1,46 @@
+<script>
+$(document).ready(function() {
+  $('#assemblies').dataTable({
+    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    "iDisplayLength": 10
+  });
+});
+</script>
+
+<div class="row">
+  <h1>Assemblies</h1>
+  [% USE Comma %]
+  [% IF assemblies.size > 0 %]
+  <table id="assemblies" class="display" cellspacing="0" width="100%">
+    <thead>
+      <tr>
+        <th>Project</th>
+        <th>Name</th>
+        <th>Organism</th>
+        <th>CDS</th>
+        <th>NT</th>
+        <th>Pep</th>
+      </tr>
+    </thead>
+    <tbody>
+    [% FOREACH assembly IN assemblies %]
+      <tr>
+        <td><a href="/project/view/[% assembly.project_id %]">[% assembly.project_name | truncate(30) %]</a></td>
+        <td>
+          <a href="/assembly/view/[% assembly.assembly_id %]">[% assembly.assembly_name %]</a><br/>[% assembly.assembly_code %]
+        </td>
+        <td>[% assembly.organism OR 'Unknown' %]</td>
+        <td>[% IF assembly.cds_file %]<a href="[% assembly.cds_file %]"><img src="/img/file_gz.png"></a>[% ELSE %]&nbsp;[% END %]</td>
+        <td>[% IF assembly.nt_file %]<a href="[% assembly.nt_file %]"><img src="/img/file_gz.png"></a>[% ELSE %]&nbsp;[% END %]</td>
+        <td>[% IF assembly.pep_file %]<a href="[% assembly.pep_file %]"><img src="/img/file_gz.png"></a>[% ELSE %]&nbsp;[% END %]</td>
+      </tr>
+    [% END %]
+    </tbody>
+  </table>
+  <div class="text-center">
+  <a class="btn btn-primary download-btn" href="/download">Download</a>
+  </div>
+  [% ELSE %]
+    No assemblies.
+  [% END %]
+</div>

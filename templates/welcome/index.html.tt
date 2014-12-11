@@ -1,0 +1,60 @@
+<div class="jumbotron">
+  <div class="container text-center">
+    <h1>Interactive Data Commons</h1>
+    <img src="/img/ivirus-square.png">
+    <p><a class="btn btn-default btn-primary" href="#" role="button">View details &raquo;</a></p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <h2>Search</h2>
+      <p>
+      From any page, enter your query in the upper-right-hand search box.
+      Search for something like &quot;<a href="/search?query=virus">virus</a>&quot; or &quot;<a href="/search?query=virus">human</a>&quot; or &quot;<a href="/search?query=virus">ocean</a>.&quot;  You can limit the results to projects or
+      publications or whatever you like.
+   </div>
+    <div class="col-md-4">
+      <h2>Browse</h2>
+      You can browse all our data interactively:
+      <ul>
+      <li><a href="/project/browse">Browse projects by domain of life</a>
+      <li><a href="/project/list">View all projects</a>
+      <li><a href="/publication/list">View all publications</a>
+      <li><a href="/assembly/list">View all assemblies</a>
+      </ul>
+    </div>
+    <div class="col-md-4">
+      <h2>Read</h2>
+      <p>
+      The <a href="/publication/list">publications list</a> shows all the 
+      papers associated with data in iVirus.
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <h2>Discover</h2>
+      <p>
+      Use <a href="http://wiki.imicrobe.us/index.php/IVirus_Bioinformatics_Tools">iVirus's bioinformatics tool</a> in the
+      <a href="http://www.iplantcollaborative.org/ci/discovery-environment">iPlant
+        Disovery Environment</a> with data in the <a href="http://mirrors.iplantcollaborative.org/browse/iplant/home/shared/imicrobe">iPlant Data Store</a>.
+    </div>
+    <div class="col-md-4">
+      <h2>Featured</h2>
+      <p>
+      <ul>
+        <li><a href="/project/view/104">The MMETSP project</a></li>
+        <li><a href="/project/view/26">Global Ocean Sampling Expedition</a></li>
+        <li><a href="/project/view/94">Pacific Ocean Virome</a></li>
+      </ul>
+    </div>
+    <div class="col-md-4">
+      <h2>Recommended</h2>
+      <p>
+      Our <a href="/pubchase/list">reading list</a> is 
+      updated weekly by the <a href="http://pubchase.com">PubChase</a> 
+      recommendation algorithm.
+    </div>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+<script>
+$(document).ready(function() {
+  $('#pubs').dataTable({
+    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    "iDisplayLength": 10
+  });
+});
+</script>
+
+<div class="row">
+  <h1>[% title %]</h1>
+  [% USE Comma %]
+  [% IF pubs.size > 0 %]
+  <table id="pubs" class="display" cellspacing="0" width="100%">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Authors</th>
+        <th>Journal</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+    [% FOREACH pub IN pubs %]
+      <tr>
+        <td><a href="http://www.pubchase.com/article/[% pub.article_id %]">[% pub.title OR 'Untitled' %]</a></td>
+        <td>[% pub.authors OR 'Unknown' | truncate(40) %]</td>
+        <td>[% pub.journal_title OR 'Unknown' %]</td>
+        <td>[% pub.article_date OR 'Unknown' %]</td>
+      </tr>
+    [% END %]
+    </tbody>
+  </table>
+  <div class="text-center">
+    <a class="btn btn-primary download-btn" href="/download">Download</a>
+  </div>
+  [% ELSE %]
+    No pubs.
+  [% END %]
+</div>
+
+<div class="text-center">
+[% IF last_update %]<em>Last updated: [% last_update %]</em>[% END %]
+</div>

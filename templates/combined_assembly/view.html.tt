@@ -1,0 +1,63 @@
+<div class="row">
+  <h1>[% title %]</h1>
+  <table class="table">
+    <tr>
+      <th>Project</th>
+      <td><a href="/project/view/[% assembly.project_id %]">[% assembly.project_name %]</a></td>
+    </tr>
+    <tr>
+      <th>Name</th>
+      <td>[% assembly.assembly_name %]</td>
+    </tr>
+    <tr>
+      <th>Phylum</th>
+      <td>[% assembly.phylum %]</td>
+    </tr>
+    <tr>
+      <th>Class</th>
+      <td>[% assembly.class %]</td>
+    </tr>
+    <tr>
+      <th>Genus</th>
+      <td>[% assembly.genus %]</td>
+    </tr>
+    <tr>
+      <th>Species</th>
+      <td>[% assembly.species %]</td>
+    </tr>
+    <tr>
+      <th>PCR Amp?</th>
+      <td>[% assembly.pcr_amp %]</td>
+    </tr>
+    <tr>
+      <th>Samples</th>
+      <td>
+        [% IF assembly.samples.size > 0 %]
+          <ul>
+          [% FOREACH sample IN assembly.samples %]
+          <li><a href="/sample/view/[% sample.sample_id %]">[% sample.sample_name %]</a></li>
+          [% END %]
+          </ul>
+        [% ELSE %]
+          None.
+        [% END %]
+      </td>
+    </tr>
+    <tr>
+      <th>Annotations</th>
+      <td>[% IF assembly.annotations_file %]<a href="[% assembly.annotations_file %]"><img src="/img/file_gz.png"></a>[% ELSE %]N/A[% END %]</td>
+    </tr>
+    <tr>
+      <th>Peptides</th>
+      <td>[% IF assembly.peptides_file %]<a href="[% assembly.peptides_file %]"><img src="/img/file_gz.png"></a>[% ELSE %]N/A[% END %]</td>
+    </tr>
+    <tr>
+      <th>CDS</th>
+      <td>[% IF assembly.cds_file %]<a href="[% assembly.cds_file %]"><img src="/img/file_gz.png"></a>[% ELSE %]N/A[% END %]</td>
+    </tr>
+    <tr>
+      <th>NT</th>
+      <td>[% IF assembly.nucleotides_file %]<a href="[% assembly.nucleotides_file %]"><img src="/img/file_gz.png"></a>[% ELSE %]N/A[% END %]</td>
+    </tr>
+  </table>
+</div>

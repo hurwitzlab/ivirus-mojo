@@ -1,0 +1,38 @@
+<script>
+function confirmDelete(url) {
+  var ok = confirm('Are you sure you want to delete this project page?');
+  if (ok) {
+    $.post(url, function() { location.href = "/admin/edit_project/[% project.project_id %]"; });
+  }
+}
+</script>
+
+<div class="text-center">
+  <a class="btn btn-default" href="/admin/create_project_page_form/[% project.project_id %]">Create Project Page</a>
+  <a class="btn btn-default" href="/admin/edit_project/[% project.project_id %]">Back To Project</a>
+</div>
+
+<br/>
+[% IF pages.size > 0 %]
+  <table class="table">
+    <tr>
+      <th>Title</th>
+      <th>&nbsp;</td>
+      <th>&nbsp;</td>
+    </tr>
+    [% FOREACH page IN pages %]
+      <tr>
+        <td>
+          [% page.title %]
+        </td>
+        <td>
+          <a class="btn btn-default" href="/admin/edit_project_page/[% page.project_page_id %]">Edit</a>
+        </td>
+        <td>
+          <a class="btn btn-default" onclick="confirmDelete('/admin/delete_project_page/[% page.project_page_id %]')">Delete</a>
+        </td>
+    [% END %]
+  </table>
+[% ELSE %]
+  <div class="well text-center">No projects.</div>
+[% END %]

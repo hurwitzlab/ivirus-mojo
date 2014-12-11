@@ -1,0 +1,72 @@
+<script>
+$(document).ready(function() {
+  $('#samples-tbl').dataTable({
+    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    "iDisplayLength": 10
+  });
+});
+</script>
+
+<div class="row">
+  <h1>[% title %]</h1>
+  [% USE Comma %]
+  [% IF samples.size > 0 %]
+    <table id="samples-tbl" class="display" cellspacing="0" width="100%">
+     <thead>
+     <tr>
+       <th>Project</th>
+       <th>Name</th>
+       <th>Annots</th>
+       <th>Pep</th>
+       <th>Contigs</th>
+       <th>Reads</th>
+       <th>CDS</th>
+     </tr>
+     </thead>
+
+     <tbody>
+     [% SET url = "http://mirrors.iplantcollaborative.org/browse/iplant/home/shared/imicrobe/camera/camera_mmetsp_ncgr/transcriptomes/" %]
+     [% FOREACH sample IN samples %]
+       <tr>
+         <td>
+           <a href="/project/view/[% sample.project_id %]">[% sample.project_name | truncate(40) %]</a>
+         </td>
+         <td>
+           <a href="/sample/view/[% sample.sample_id %]">[% sample.sample_name %]</a>
+         </td>
+         <td>
+           [% IF sample.annotations_file %]
+             <a href="[% url %][% sample.annotations_file %]"><img src="/img/file_gz.png"></a><br/>
+           [% END %]
+         </td>
+         <td>
+           [% IF sample.peptides_file %]
+             <a href="[% url %][% sample.peptides_file %]"><img src="/img/file_gz.png"></a><br/>
+           [% END %]
+         </td>
+         <td>
+           [% IF sample.contigs_file %]
+             <a href="[% url %][% sample.contigs_file %]"><img src="/img/file_gz.png"></a><br/>
+           [% END %]
+         </td>
+         <td>
+           [% IF sample.reads_file %]
+             <a href="[% url %][% sample.reads_file %]"><img src="/img/file_gz.png"></a><br/>
+           [% END %]
+         </td>
+         <td>
+           [% IF sample.cds_file %]
+             <a href="[% url %][% sample.cds_file %]"><img src="/img/file_gz.png"></a>
+           [% END %]
+         </td>
+       </tr>
+     [% END %]
+     </tbody>
+    </table>
+    <div class="text-center">
+    <a class="btn btn-primary download-btn" href="/download">Download</a>
+    </div>
+  [% ELSE %]
+    No samples.
+  [% END %]
+</div>

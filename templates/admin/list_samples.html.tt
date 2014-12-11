@@ -1,0 +1,43 @@
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#samples-tbl').dataTable({"iDisplayLength": 50});
+});
+
+function confirmDelete(url) {
+  var ok = confirm('Are you sure you want to delete this sample?');
+  if (ok) {
+    $.post(url, function() { location.href = "/admin/list_samples/[% project.project_id %]"; });
+  }
+}
+</script>
+
+<h1>Samples</h1>
+
+<div class="text-center">
+<a class="btn btn-default" href="/admin/list_projects">Back to Projects</a>
+</div>
+
+[% IF samples.size > 0 %]
+<table id="samples-tbl" class="display" cellspacing="0" width="100%">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    [% FOREACH sample IN samples %]
+    <tr>
+      <td>
+        <a href="/sample/view/[% sample.sample_id %]">[% sample.sample_name %]</a>
+      </td>
+      <td align="center">
+        <a class="btn btn-default" onclick="confirmDelete('/admin/delete_sample/[% sample.sample_id %]')">Delete</a>
+      </td>
+    </tr>
+    [% END %]
+  </tbody>
+</table>
+[% ELSE %]
+  No samples.
+[% END %]

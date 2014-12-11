@@ -1,0 +1,49 @@
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#publications-tbl').dataTable({"iDisplayLength": 50});
+});
+
+function confirmDelete(url, object_type, return_url) {
+  var ok = confirm('Are you sure you want to delete this ' + object_type + '?');
+  if (ok) {
+    $.post(url, function() { location.href = return_url; });
+  }
+}
+</script>
+
+<h1>Publications</h1>
+
+[% IF pubs.size > 0 %]
+<table id="publications-tbl" class="display" cellspacing="0" width="100%">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Journal</th>
+      <th>Date</th>
+      <th>Project</th>
+      <th>&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    [% FOREACH p IN pubs %]
+    <tr>
+      <td>
+        <a href="/admin/view_publication/[% p.publication_id %]">[% p.title %]</a>
+      </td>
+      <td>[% p.author %]</td>
+      <td>[% p.journal %]</td>
+      <td>[% p.pub_date OR 'NA' %]</td>
+      <td>
+        [% IF p.project_id %]<a href="/admin/view_project/[% p.project_id %]">View</a>[% ELSE %]N/A[% END %]
+      </td>
+      <td>
+        <a class="btn btn-default" onclick="confirmDelete('/admin/delete_publication/[% p.publication_id %]', 'publication', '/admin/list_publications')">Delete</a>
+      </td>
+    </tr>
+    [% END %]
+  </tbody>
+</table>
+[% ELSE %]
+  No publications.
+[% END %]

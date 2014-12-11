@@ -1,0 +1,37 @@
+<div class="text-center">
+  <a class="btn btn-default" href="/admin/edit_project/[% project.project_id %]">Back To Project</a>
+</div>
+
+  <h3>Create Page for &quot[% project.project_name | truncate(40) %]&quot;</h3>
+
+<div class="row">
+  <form role="form" method="post" action="/admin/create_project_page">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" class="form-control" id="title" name="title" placeholder="Title">
+    </div>
+
+    <div class="form-group">
+      <label for="display_order">Display Order</label>
+      <input type="text" class="form-control" id="display_order" name="display_order" placeholder="1">
+    </div>
+
+    <div class="form-group">
+      <label for="format">Format</label>
+      <select name="format" class="form-control">
+        <option>HTML</option>
+        <option>Markdown</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="contents">Contents</label>
+      <textarea id="contents" name="contents" class="form-control" rows="10"></textarea>
+    </div>
+
+    <div class="text-center form-group">
+      <input type="hidden" name="project_id" value="[% project.project_id %]">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+</div>

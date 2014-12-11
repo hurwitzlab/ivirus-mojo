@@ -1,0 +1,36 @@
+<div class="row">
+  <h1>[% title | truncate(50) %]</h1>
+  <table class="table">
+    <tr>
+      <th>Title</th>
+      <td>[% pub.title %]</td>
+    </tr>
+    <tr>
+      <th>Author</th>
+      <td>[% pub.author %]</td>
+    </tr>
+    <tr>
+      <th>Journal</th>
+      <td>[% pub.journal %]</td>
+    </tr>
+    <tr>
+      <th>Pub Date</th>
+      <td>[% pub.pub_date %]</td>
+    </tr>
+    <tr>
+      <th>DOI</th>
+      <td>[% pub.doi %]</td>
+    </tr>
+    <tr>
+      <th>PubMed</th>
+      <td>
+        [% IF pub.pubmed_id %]
+          <a href="http://www.ncbi.nlm.nih.gov/pubmed/?term=[% pub.pubmed_id %]">[% pub.pubmed_id %]</a>
+        [% ELSE %]
+          &nbsp;
+        [% END %]
+      </td>
+    </tr>
+  </table>
+  </p>
+</div>

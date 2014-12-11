@@ -1,0 +1,11 @@
+<h1>Project: [% project.project_name %]</h1>
+
+Pages [% project.project_pages.size OR '0' %]
+
+[% IF project.project_pages.size > '0' %]
+  <ul>
+    [% FOREACH page IN project.project_pages %]
+    <li><a href="/admin/edit_project_page?project_page_id=[% page.id %]">[% page.title %]</a></li>
+  [% END %]
+  </ul>
+[% END %]

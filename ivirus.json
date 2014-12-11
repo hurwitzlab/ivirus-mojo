@@ -1,0 +1,9 @@
+{
+    "hypnotoad": {
+        "listen": [
+            "http://*:3001"
+        ],
+        "workers": "10"
+    },
+    "captcha_conf": "/usr/local/hurwitzlab/configs/web/ivirus-captcha.yaml"
+}
